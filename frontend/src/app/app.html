@@ -1,0 +1,57 @@
+<header class="topbar">
+  <a class="brand" href="#home" aria-label="CareConnect home"><span class="brand-mark">♡</span> care<span>connect</span></a>
+  <nav><a href="#pets">Find a pet</a><a href="#about">Our promise</a></nav>
+  <a class="nav-cta" href="#pets">Meet your match <span>↗</span></a>
+</header>
+
+<main id="home">
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="dot"></span> A little love goes a long way</div>
+      <h1>Find your<br>new <em>best friend.</em></h1>
+      <p class="hero-text">Big hearts, wet noses, and second chances. Meet the lovely pets waiting to make your house feel like home.</p>
+      <a class="primary-button" href="#pets">Meet the pets <span>→</span></a>
+      <div class="happy-note"><span class="avatar-stack"><b>🐶</b><b>🐱</b><b>🐰</b></span><span><strong>128 little happy endings</strong><small>and counting this year</small></span></div>
+    </div>
+    <div class="hero-art" aria-label="Illustration of pets looking for a home">
+      <div class="sun"></div><div class="hero-circle"></div>
+      <div class="floating-note note-one">♡ &nbsp; love lives here</div>
+      <div class="hero-pet dog">🐕</div><div class="hero-pet cat">🐈</div><div class="hero-pet rabbit">🐇</div>
+      <div class="plant plant-left">🌿</div><div class="plant plant-right">🪴</div>
+      <div class="floating-note note-two">adopt <span>·</span> love <span>·</span> repeat</div>
+    </div>
+    <div class="hero-bottom"><span>01 — 06</span><span class="line"></span><span>GOOD THINGS HAPPEN WHEN WE FIND EACH OTHER</span></div>
+  </section>
+
+  <section id="pets" class="pets-section">
+    <div class="section-heading">
+      <div><div class="eyebrow"><span class="dot"></span> YOUR NEW ROOMMATE IS HERE</div><h2>Friends of all <em>shapes & sizes.</em></h2></div>
+      <p>Each one has a story. Maybe you’re the next chapter.</p>
+    </div>
+    <div class="filters" role="group" aria-label="Filter pets by type">
+      <button *ngFor="let type of ['All pets', 'Dog', 'Cat', 'Rabbit']" [class.active]="selectedType === type" (click)="selectedType = type">{{ type }}<span *ngIf="type === 'All pets'"> ({{ pets.length }})</span></button>
+    </div>
+    <div *ngIf="loading" class="status">Finding your future best friend…</div>
+    <div *ngIf="error" class="status error">{{ error }}</div>
+    <div class="pet-grid" *ngIf="!loading && !error">
+      <article class="pet-card" *ngFor="let pet of filteredPets">
+        <div class="pet-photo" [style.background]="pet.color"><span class="pet-emoji">{{ pet.emoji }}</span><button class="heart" type="button" [attr.aria-label]="'Save ' + pet.name">♡</button><span class="pet-tag">{{ pet.type }}</span></div>
+        <div class="pet-info"><div class="pet-title"><h3>{{ pet.name }}</h3><span class="age">{{ pet.age }}</span></div><p class="breed">{{ pet.breed }}</p><p class="description">{{ pet.description }}</p><button class="meet-button" (click)="adopt(pet)">Meet {{ pet.name }} <span>↗</span></button></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="about" class="promise">
+    <div class="promise-icon">✳</div><div><div class="eyebrow">A SOFTER WAY TO START</div><h2>Good matches. <em>Gentle beginnings.</em></h2></div><p>Every pet is cared for, checked by a vet, and matched with a family ready to love them for life.</p>
+  </section>
+  <footer><a class="brand" href="#home"><span class="brand-mark">♡</span> care<span>connect</span></a><span>Made for the love of little paws. © 2025</span><a href="#home">Back to top ↑</a></footer>
+</main>
+
+<div class="toast" *ngIf="notice" (click)="notice = ''">{{ notice }} <button aria-label="Dismiss">×</button></div>
+<div class="modal-backdrop" *ngIf="selectedPet" (click)="closeDialog()">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="dialog-title" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeDialog()" aria-label="Close">×</button>
+    <div class="eyebrow"><span class="dot"></span> A LOVELY CHOICE</div><h2 id="dialog-title">Say hello to <em>{{ selectedPet.name }}.</em></h2><p>Leave your details and our adoption team will be in touch about meeting {{ selectedPet.name }}.</p>
+    <form (ngSubmit)="submitInterest()"><label>Your name<input name="name" [(ngModel)]="adopterName" required placeholder="Jamie Smith"></label><label>Email address<input name="email" [(ngModel)]="adopterEmail" type="email" required placeholder="jamie@example.com"></label><button class="primary-button" type="submit" [disabled]="submitting">{{ submitting ? 'Sending…' : 'Send my interest' }} <span>→</span></button></form>
+  </section>
+</div>
